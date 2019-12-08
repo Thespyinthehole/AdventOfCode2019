@@ -137,15 +137,16 @@ amplifiers[0].inStream.append(settings[0])
 amplifiers[0].inStream.append("0")
 
 i = 0
-while True:
-    print(amplifiers[i].inStream)
+halted = 0
+while halted < 5:
     amplifiers[i].RunProgram()
     if amplifiers[i].halt:
-        break
+        halted = halted + 1
     i = i + 1
     i = i % 5
-    input()
-print("done")
+
+for o in range(5):
+    print(amplifiers[o].outStream)
 #while not amplifiers[i].halt:
 #    print(data)
 #    if not setup:
