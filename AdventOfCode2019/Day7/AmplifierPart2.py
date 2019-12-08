@@ -66,7 +66,7 @@ class IntComputer:
 
         self.PcCount(3)
 
-    def LessThan(self,pc,stack,params):
+    def LessThan(self,params):
         part1 = self.GetValue(params,1)
         part2 = self.GetValue(params,2)
         if(part1 < part2):
@@ -140,6 +140,7 @@ i = 0
 halted = 0
 while halted < 5:
     amplifiers[i].RunProgram()
+    
     if amplifiers[i].halt:
         halted = halted + 1
     i = i + 1
