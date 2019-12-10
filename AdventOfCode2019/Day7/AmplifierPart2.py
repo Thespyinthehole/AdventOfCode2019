@@ -56,7 +56,6 @@ class IntComputer:
             return 
         
         self.pc = self.GetValue(params,2)
-        return 
 
     def JumpIfFalse(self,params):
         cmp = self.GetValue(params,1)
@@ -116,44 +115,42 @@ class IntComputer:
             
 filepath = 'input.txt'
 file = open(filepath,"r")
-inputData = """3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
-27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5"""#file.read();
-settings = "9,8,7,6,5"
+inputData = file.read();
+settings = "9,7,8,5,6"
 settings = settings.split(",")
-#settings = list(permutations(settings))
+settings = list(permutations(settings))
 #print(settings)
 stack = inputData.replace("\n","").split(",")
-amplifiers = []
 
-amplifiers.append(IntComputer(stack.copy(),[]))
-for i in range(1,5):
-    lastOut = amplifiers[i-1].outStream
-    lastOut.append(settings[i])
-    amplifiers.append(IntComputer(stack.copy(),lastOut))
+maximum = 0
+for setting in settings:
+    amplifiers = []
+    amplifiers.append(IntComputer(stack.copy(),[]))
+    for i in range(1,5):
+        lastOut = amplifiers[i-1].outStream
+        amplifiers.append(IntComputer(stack.copy(),lastOut))
 
-amplifiers[0].inStream = amplifiers[4].outStream
+    amplifiers[0].inStream = amplifiers[4].outStream
 
-amplifiers[0].inStream.append(settings[0])
-amplifiers[0].inStream.append("0")
+    amplifiers[0].inStream.append("0")
 
-i = 0
-halted = 0
-while halted < 5:
-    amplifiers[i].RunProgram()
-    
-    if amplifiers[i].halt:
-        halted = halted + 1
-    i = i + 1
-    i = i % 5
+    i = 0
+    halted = 0
+    first = True
+    while halted < 5:
+        if first:
+            amplifiers[i].inStream.append(setting[i])
+        amplifiers[i].RunProgram()
+        
+        if amplifiers[i].halt:
+            halted = halted + 1
+        i = i + 1
+        if i == 5:
+            i = 0
+            first = False
 
-for o in range(5):
-    print(amplifiers[o].outStream)
-#while not amplifiers[i].halt:
-#    print(data)
-#    if not setup:
-#        data.append(settings[i])
-##    amplifiers[i] = RunProgram(amplifiers[i])
- #   i = i + 1
-  #  if i == 5:
-  #      i = 0
-   #     setup = True
+    value = int(amplifiers[4].outStream[0])
+    if value > maximum:
+        maximum = value
+
+print(maximum)
